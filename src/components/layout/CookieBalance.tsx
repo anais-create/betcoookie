@@ -13,14 +13,14 @@ export function CookieBalance({ className }: { className?: string }) {
     <Link
       href="/boutique"
       className={cn(
-        "group inline-flex items-center gap-2 rounded-full border border-cookie-base/40 bg-cream px-3 py-1.5 shadow-soft transition-transform hover:-translate-y-0.5",
+        "group inline-flex items-center gap-1.5 rounded-full border border-cookie-base/40 bg-cream px-2.5 py-1.5 shadow-soft transition-transform hover:-translate-y-0.5 sm:gap-2 sm:px-3",
         className,
       )}
     >
-      <span className="text-lg leading-none" aria-hidden>
+      <span className="text-base leading-none sm:text-lg" aria-hidden>
         🍪
       </span>
-      <span className="font-display text-lg font-bold tabular-nums text-choc-chip">
+      <span className="font-display text-base font-bold tabular-nums text-choc-chip sm:text-lg">
         {formatCookies(balance)}
       </span>
       <span className="grid size-5 place-items-center rounded-full bg-choc-chip text-cream transition-colors group-hover:bg-choc-dark">

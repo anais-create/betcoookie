@@ -112,7 +112,7 @@ function Field({
       <span className="font-semibold text-choc-chip/80">{label}</span>
       <input
         {...props}
-        className="rounded-2xl border border-cookie-base/40 bg-cream px-4 py-2.5 text-choc-chip outline-none transition-colors focus:border-caramel"
+        className="rounded-2xl border border-cookie-base/40 bg-cream px-4 py-2.5 text-base text-choc-chip outline-none transition-colors focus:border-caramel"
       />
     </label>
   );

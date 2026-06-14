@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Baloo_2, Inter } from "next/font/google";
 import "./globals.css";
 import { WalletProvider } from "@/store/wallet";
@@ -20,6 +20,13 @@ export const metadata: Metadata = {
   title: "Bet Cookie 🍪 — Paris sportifs en cookies",
   description:
     "Mise tes cookies sur le sport ! Paris en monnaie virtuelle, classement gourmand et bonus quotidiens.",
+};
+
+/** Largeur device + zones sûres (encoche / barre d'accueil iOS) pour la bottom nav. */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
