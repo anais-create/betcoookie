@@ -1,0 +1,64 @@
+// Schéma de la base Bet Cookie — PostgreSQL (hébergé, ex. Neon en prod).
+// Le backend fait foi : solde, paris et sessions vivent ici, plus en localStorage.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  // URL « pooled » (avec -pooler) pour le runtime serverless.
+  url       = env("DATABASE_URL")
+  // URL directe (sans -pooler) pour les migrations.
+  directUrl = env("DIRECT_URL")
+}
+
+/// Un parieur. Le solde est en cookies entiers ; les compteurs gagnés/perdus
+/// sont la source de vérité du taux de réussite (pas recalculés depuis les paris).
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  name           String
+  avatar         String    @default("🍪")
+  passwordHash   String
+  balance        Int       @default(1000)
+  betsWon        Int       @default(0)
+  betsLost       Int       @default(0)
+  /// Dernière réclamation du bonus quotidien (null = jamais).
+  lastDailyClaim DateTime?
+  createdAt      DateTime  @default(now())
+
+  bets     Bet[]
+  sessions Session[]
+}
+
+/// Session opaque : l'id EST le token stocké dans le cookie httpOnly.
+model Session {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+/// Un pari placé. status ∈ "pending" | "won" | "lost".
+/// oddsAtBet fige la cote au moment de la mise ; matchLabel/selectionLabel
+/// sont dénormalisés pour afficher l'historique sans recharger le match.
+model Bet {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  matchId        String
+  matchLabel     String
+  selectionKey   String
+  selectionLabel String
+  stake          Int
+  oddsAtBet      Float
+  status         String    @default("pending")
+  placedAt       DateTime  @default(now())
+  settledAt      DateTime?
+
+  @@index([userId])
+}
